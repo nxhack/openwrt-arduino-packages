@@ -1,0 +1,12 @@
+--- a/SConstruct
++++ b/SConstruct
+@@ -167,7 +167,8 @@
+     env.Append(CFLAGS = [
+                '-std=gnu99',
+                '-Wall',
+-               '-Wformat=0',
++               '-Wno-format',
++               '-Wno-format-security',
+                '-fstrict-aliasing'])
+ 
+     if env['FORCE32'] == 'true':

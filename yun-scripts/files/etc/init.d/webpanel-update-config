@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+
+# Update /etc/avahi/services/arduino.service to announce
+# correct hardware flavor
+
+START=60
+
+start() {
+	. /lib/ar71xx.sh
+	ar71xx_board_detect
+	case $AR71XX_BOARD_NAME in
+	arduino-yun-shield)
+		;;
+	*)
+		uci set arduino.@arduino[0].default_target='arduino_yun'
+		uci commit
+		;;
+	esac
+}

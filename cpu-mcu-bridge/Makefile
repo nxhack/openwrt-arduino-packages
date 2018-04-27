@@ -1,0 +1,58 @@
+#
+# Copyright (c) 2014-2016 Arduino LLC. All right reserved.
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=cpu-mcu-bridge
+PKG_VERSION:=1.6.1-git
+PKG_RELEASE:=2
+
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/arduino/YunBridge.git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=f94eb0d6bac5843703b1e482d0a85113087b8d6e
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_MIRROR_HASH:=f60e937ccdf5744ff99f7f4cb5549b9ac42c97710e1bb08e04454633372417a5
+
+PKG_MAINTAINER:=
+PKG_LICENSE:=
+PKG_LICENSE_FILES:=
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/cpu-mcu-bridge
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=CPU-MCU Bridge
+  DEPENDS:=+python-light
+endef
+
+define Package/cpu-mcu-bridge/description
+ Bridge lets linux and arduino communicate
+endef
+
+define Build/Compile
+	# NOOP
+endef
+
+define Package/cpu-mcu-bridge/install
+	$(INSTALL_DIR) $(1)/usr/lib/python2.7/bridge
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/bridge/*.py $(1)/usr/lib/python2.7/bridge
+
+	$(INSTALL_DIR) $(1)/usr/lib/php/bridge
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/bridge/php/*.php $(1)/usr/lib/php/bridge
+
+	# Installing run-bridge script in /usr/bin
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) ./files/run-bridge $(1)/usr/bin
+	$(INSTALL_BIN) ./files/kill-bridge $(1)/usr/bin
+	#$(INSTALL_BIN) ./files/bridge-error $(1)/usr/bin
+	#$(INSTALL_BIN) ./files/bridge-started $(1)/usr/bin
+	#$(INSTALL_BIN) ./files/bridge-stopped $(1)/usr/bin
+endef
+
+$(eval $(call BuildPackage,cpu-mcu-bridge))
