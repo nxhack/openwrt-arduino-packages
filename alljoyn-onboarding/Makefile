@@ -6,7 +6,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=alljoyn-$(AJ_SERVICE)
 PKG_BASE_VERSION:=15.04
 PKG_PATCHLEVEL:=.00
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_HASH:=a6deb8d387b11bac58808a0073bb799bb805a9372d989ec78c6b0e33e4a794a8
 PKG_VERSION:=$(PKG_BASE_VERSION)$(PKG_PATCHLEVEL)
 PKG_TARBALL_VERSION:=$(PKG_VERSION)
@@ -42,7 +42,7 @@ define Package/$(PKG_NAME)
 	+alljoyn-about \
 	+alljoyn-config \
 	+alljoyn-services_common \
-	+hostapd \
+	+hostapd-mini \
 	+wpa-cli
   URL:=http://www.allseenalliance.org
   MAINTAINER:=AllSeen Alliance <allseen-core@lists.allseenalliance.org>
