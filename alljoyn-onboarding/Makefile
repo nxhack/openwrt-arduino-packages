@@ -42,7 +42,6 @@ define Package/$(PKG_NAME)
 	+alljoyn-about \
 	+alljoyn-config \
 	+alljoyn-services_common \
-	+hostapd-mini \
 	+wpa-cli
   URL:=http://www.allseenalliance.org
   MAINTAINER:=AllSeen Alliance <allseen-core@lists.allseenalliance.org>
