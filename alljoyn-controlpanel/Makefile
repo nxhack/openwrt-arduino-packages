@@ -6,13 +6,14 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=alljoyn-$(AJ_SERVICE)
 PKG_BASE_VERSION:=15.04
 PKG_PATCHLEVEL:=.00
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_HASH:=a6deb8d387b11bac58808a0073bb799bb805a9372d989ec78c6b0e33e4a794a8
 PKG_VERSION:=$(PKG_BASE_VERSION)$(PKG_PATCHLEVEL)
 PKG_TARBALL_VERSION:=$(PKG_VERSION)
 #PKG_BUILD_DIR:=$(BUILD_DIR)/alljoyn-services-$(PKG_TARBALL_VERSION)-src
 PKG_SOURCE:=alljoyn-services-$(PKG_TARBALL_VERSION)-src.tar.gz
-PKG_SOURCE_URL:=https://allseenalliance.org/releases/alljoyn/$(PKG_BASE_VERSION)/
+#PKG_SOURCE_URL:=https://allseenalliance.org/releases/alljoyn/$(PKG_BASE_VERSION)/
+PKG_SOURCE_URL:=https://mirrors.kernel.org/allseenalliance/alljoyn/$(PKG_BASE_VERSION)/
 
 PKG_IREMAP:=0
 
