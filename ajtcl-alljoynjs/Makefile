@@ -2,23 +2,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ajtcl-alljoynjs
 PKG_VERSION:=15.04
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
-# PKG_REVISION:=ab5afcfded9d723714528075e5895eed9ffd1983 # (17 Jun 2015)
-# PKG_REVISION:=1303a77588209808d682faf7fb5ff14bf8088a40 # (31 Aug 2015)
-
-# PKG_SOURCE_PROTO:=git
-
-PKG_SOURCE:=alljoyn-js-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://git.allseenalliance.org/cgit/core/alljoyn-js.git/snapshot/
-
-PKG_HASH:=97e6bcf01409a083431cb4e57c1df6b348ae8d511f87d451c6df209877c283fc
-
-# PKG_SOURCE_VERSION:=$(PKG_REVISION)
-# PKG_SOURCE_URL:=https://git.allseenalliance.org/gerrit/core/alljoyn-js.git
-# PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/alljoyn-js-$(PKG_VERSION)
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/alljoyn/core-alljoyn-js.git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=57e7f26fad727bb41015fff46f7d96fe261dc38c
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_MIRROR_HASH:=eac178b794cc75d0b8243884d09dbc9c5c8e89934f2d1d8c1ee1fbcff1cd7252
 
 PKG_BUILD_PARALLEL:=1
 
@@ -32,8 +23,7 @@ define Package/ajtcl-alljoynjs
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=ajtcl +ajtcl-services +duktape
-  URL:=http://www.allseenalliance.org
-  MAINTAINER:=AllSeen Alliance <allseen-core@lists.allseenalliance.org>
+  URL:=https://github.com/alljoyn/
   MENU:=1
 endef
 

@@ -2,19 +2,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ajtcl
 PKG_VERSION:=15.04b
-PKG_RELEASE:=1
-PKG_HASH:=62a59221e655e7392ef852eb76c714f8c1bcbc515ccd3c2e94a071c31e26a804
+PKG_RELEASE:=2
 
-# PKG_SOURCE_PROTO:=git
-# PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-src.tar.gz
-# PKG_REVISION:=c7246570b10c70913c2b983b5f9353672908f73d
-# PKG_SOURCE_URL:=https://git.allseenalliance.org/gerrit/core/ajtcl.git
-# PKG_SOURCE_VERSION:=$(PKG_REVISION)
-# PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-
-#PKG_BUILD_DIR:=$(BUILD_DIR)/ajtcl-$(PKG_VERSION)
-PKG_SOURCE:=ajtcl-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://git.allseenalliance.org/cgit/core/ajtcl.git/snapshot/
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/alljoyn/core-ajtcl.git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=7d7871a950985a03979c8e22df258c049ae12b20
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_MIRROR_HASH:=11ce6931e239ad36f54664279e1b2a91c15208527179483f1136177337b035ee
 
 PKG_BUILD_PARALLEL:=1
 
@@ -27,9 +22,8 @@ define Package/ajtcl/Default
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl +libpthread +librt
-  URL:=http://www.allseenalliance.org
+  URL:=https://github.com/alljoyn/
   TITLE:=The AllJoyn Thin Client Library
-  MAINTAINER:=AllSeen Alliance <allseen-core@lists.allseenalliance.org>
 endef
 
 define Package/ajtcl

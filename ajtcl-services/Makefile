@@ -2,19 +2,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ajtcl-services
 PKG_VERSION:=15.04
-PKG_RELEASE:=1
-PKG_HASH:=21138a7999e7826f24857df18c0396c587e83500ff4a8c3e0251f7253a516080
+PKG_RELEASE:=2
 
-# PKG_SOURCE_PROTO:=git
-# PKG_REVISION:=17d0de166022b5a56f9e09a7faffbf40ee241080
-
-PKG_SOURCE:=base_tcl-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://git.allseenalliance.org/cgit/services/base_tcl.git/snapshot/
-PKG_BUILD_DIR:=$(BUILD_DIR)/base_tcl-$(PKG_VERSION)
-
-# PKG_SOURCE_VERSION:=$(PKG_REVISION)
-# PKG_SOURCE_URL:=https://git.allseenalliance.org/gerrit/services/base_tcl.git
-# PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/alljoyn/services-base_tcl.git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=1cee32aa4d545eec8b80a6438b271f873d354d05
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_MIRROR_HASH:=83ad0a9002c052974b1acc559c318284e6a926a80790ba0abd8a8809e4acfabd
 
 PKG_BUILD_PARALLEL:=1
 
@@ -28,8 +23,7 @@ define Package/ajtcl-services/Default
   CATEGORY:=Network
   DEPENDS:=ajtcl
   TITLE:=AllJoyn Thin Client Base Services library
-  URL:=http://www.allseenalliance.org
-  MAINTAINER:=AllSeen Alliance <allseen-core@lists.allseenalliance.org>
+  URL:=https://github.com/alljoyn/
 endef
 
 define Package/ajtcl-services
