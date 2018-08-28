@@ -1,28 +1,34 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=alljoyn
-PKG_BASE_VERSION:=15.04
-PKG_PATCHLEVEL:=b
-PKG_RELEASE:=2
-PKG_HASH:=749e820ac5379538025218c6507cc813ee6b24da55e0a6340474d694811fecf4
+PKG_BASE_VERSION:=16.04
+PKG_PATCHLEVEL:=.00
 PKG_VERSION:=$(PKG_BASE_VERSION)$(PKG_PATCHLEVEL)
-PKG_TARBALL_VERSION:=$(PKG_BASE_VERSION).00$(PKG_PATCHLEVEL)
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_TARBALL_VERSION)-src
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_TARBALL_VERSION)-src.tar.gz
-#PKG_SOURCE_URL:=https://allseenalliance.org/releases/alljoyn/$(PKG_BASE_VERSION)/
-PKG_SOURCE_URL:=https://mirrors.kernel.org/allseenalliance/alljoyn/$(PKG_BASE_VERSION)/
+PKG_TARBALL_VERSION:=$(PKG_BASE_VERSION)$(PKG_PATCHLEVEL)
+PKG_RELEASE:=1
+
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/alljoyn/core-alljoyn.git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_TARBALL_VERSION)-src
+PKG_SOURCE_VERSION:=e52a38239380bca9484f08381377a0dd7db0c05f
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_TARBALL_VERSION)-src.tar.xz
+PKG_MIRROR_HASH:=9cd38138eecc816be249436921e001e006f4b7fbfaf181b2056e7ecba10a47ab
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
 PKG_IREMAP:=0
-
 PKG_BUILD_PARALLEL:=1
 
 PKG_CONFIG_DEPENDS:= \
 	CONFIG_DEBUG \
 	CONFIG_PACKAGE_alljoyn-c \
 	CONFIG_PACKAGE_alljoyn-about \
+	CONFIG_PACKAGE_alljoyn-config \
 	CONFIG_PACKAGE_alljoyn-samples
 
 include $(INCLUDE_DIR)/package.mk
+
+override CONFIG_AUTOREMOVE=
 
 ifneq ($(CONFIG_CCACHE),)
   TARGET_CC=$(TARGET_CC_NOCACHE)
@@ -33,8 +39,7 @@ define Package/alljoyn/Default
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+libopenssl +libpthread +librt +libstdcpp +libcap
-  URL:=http://www.allseenalliance.org
-  MAINTAINER:=AllSeen Alliance <allseen-core@lists.allseenalliance.org>
+  URL:=https://github.com/alljoyn/alljoyn.github.com/wiki
 endef
 
 define Package/alljoyn
@@ -89,11 +94,23 @@ provided by About has been integrated into liballjoyn with a simpler API.  This
 library will continue to be supported into 2015 and will be removed in 2016.
 endef
 
+define Package/alljoyn-config
+$(call Package/alljoyn/Default)
+	TITLE:=AllJoyn Config service library
+	DEPENDS:=alljoyn \
+		+PACKAGE_alljoyn-about:alljoyn-about
+endef
+
+define Package/alljoyn-config/description
+AllJoyn Config service library.
+endef
+
 define Package/alljoyn-samples
 $(call Package/alljoyn/Default)
   TITLE:=AllJoyn - testing samples
   DEPENDS:=alljoyn \
-	+PACKAGE_alljoyn-about:alljoyn-about
+	+PACKAGE_alljoyn-about:alljoyn-about \
+	+PACKAGE_alljoyn-about:alljoyn-config
 endef
 
 define Package/alljoyn-samples/description
@@ -113,6 +130,9 @@ ifdef CONFIG_PACKAGE_alljoyn-about
   ALLJOYN_SERVICES+=about,
 endif
 
+ifdef CONFIG_PACKAGE_alljoyn-config
+  ALLJOYN_SERVICES+=config,
+endif
 
 ifeq ($(CONFIG_DEBUG),y)
   ALLJOYN_BUILD_VARIANT:=debug
@@ -122,9 +142,16 @@ endif
 
 
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/build/openwrt/openwrt/$(ALLJOYN_BUILD_VARIANT)/dist
+PKG_INSTALL_TEST_DIR:=$(PKG_BUILD_DIR)/build/openwrt/openwrt/$(ALLJOYN_BUILD_VARIANT)/test
 
 TARGET_CFLAGS+=-fPIC
 TARGET_CPPFLAGS+=-fPIC
+
+ifdef CONFIG_PACKAGE_$(PKG_NAME)-samples
+  ifdef CONFIG_PACKAGE_alljoyn-about
+    ALLJOYN_BUILD_SERVICES_SAMPLES:=on
+  endif
+endif
 
 define Build/Configure
 # Override default to do nothing
@@ -140,7 +167,7 @@ define Build/Compile
 		"SERVICES=$(ALLJOYN_SERVICES)" \
 		"BUILD_SERVICES_SAMPLES=$(ALLJOYN_BUILD_SERVICES_SAMPLES)" \
 		"VARIANT=$(ALLJOYN_BUILD_VARIANT)" \
-		BR=off \
+		BR=on \
 		ICE=off \
 		POLICYDB=on \
 		"TARGET_CC=$$(TARGET_CC)" \
@@ -166,12 +193,21 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn.a $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn.so $(1)/usr/lib/
+
 ifdef CONFIG_PACKAGE_alljoyn-about
 	$(INSTALL_DIR) $(1)/usr/include/alljoyn/about
 	$(CP) $(PKG_INSTALL_DIR)/cpp/inc/alljoyn/about/*.h $(1)/usr/include/alljoyn/about
 	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn_about.a $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn_about.so $(1)/usr/lib/
 endif
+
+ifdef CONFIG_PACKAGE_alljoyn-config
+	$(INSTALL_DIR) $(1)/usr/include/alljoyn/config
+	$(CP) $(PKG_INSTALL_DIR)/cpp/inc/alljoyn/config/*.h $(1)/usr/include/alljoyn/config
+	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn_config.a $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn_config.so $(1)/usr/lib/
+endif
+
 ifdef CONFIG_PACKAGE_alljoyn-c
 	$(INSTALL_DIR) $(1)/usr/include/alljoyn_c
 	$(CP) $(PKG_INSTALL_DIR)/c/inc/alljoyn_c/*.h $(1)/usr/include/alljoyn_c/
@@ -219,32 +255,44 @@ define Package/alljoyn-about/install
 	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn_about.so $(1)/usr/lib/
 endef
 
+define Package/alljoyn-config/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn_config.so $(1)/usr/lib/
+endef
+
 define Package/alljoyn-samples/install
 	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/aes_ccm $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/bastress $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/bignum $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/bbjitter $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/marshal $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/names $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/remarshal $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/socktest $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/srp $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_TEST_DIR)/cpp/bin/unpack $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/advtunnel $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/aes_ccm $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/bastress $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/bastress2 $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/bbclient $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/bbjitter $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/bbjoin $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/bbservice $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/bbsig $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/bignum $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/marshal $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/names $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/ns $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/rawclient $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/rawservice $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/remarshal $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/sessions $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/socktest $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/srp $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/unpack $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/samples/AboutClient $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/samples/AboutService $(1)/usr/bin/
 ifdef CONFIG_PACKAGE_alljoyn-about
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/samples/sample_rule_app $(1)/usr/bin/
+endif
+
+ifdef CONFIG_PACKAGE_alljoyn-config
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/samples/ConfigClient $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/samples/ConfigService $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/alljoyn-config
+	$(CP) $(PKG_BUILD_DIR)/services/config/cpp/samples/ConfigServiceSample/ConfigService.conf $(1)/etc/alljoyn-config/
 endif
 endef
 
@@ -296,5 +344,5 @@ $(eval $(call BuildPackage,alljoyn))
 $(eval $(call BuildPackage,alljoyn-non-gw-config))
 $(eval $(call BuildPackage,alljoyn-c))
 $(eval $(call BuildPackage,alljoyn-about))
+$(eval $(call BuildPackage,alljoyn-config))
 $(eval $(call BuildPackage,alljoyn-samples))
-
