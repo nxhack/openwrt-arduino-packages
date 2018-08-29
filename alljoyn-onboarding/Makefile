@@ -4,26 +4,25 @@ AJ_SERVICE_NAME:=onboarding
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=alljoyn-$(AJ_SERVICE)
-PKG_BASE_VERSION:=15.04
+PKG_BASE_VERSION:=16.04
 PKG_PATCHLEVEL:=.00
-PKG_RELEASE:=4
-PKG_HASH:=a6deb8d387b11bac58808a0073bb799bb805a9372d989ec78c6b0e33e4a794a8
 PKG_VERSION:=$(PKG_BASE_VERSION)$(PKG_PATCHLEVEL)
 PKG_TARBALL_VERSION:=$(PKG_VERSION)
-#PKG_BUILD_DIR:=$(BUILD_DIR)/alljoyn-services-$(PKG_TARBALL_VERSION)-src
-PKG_SOURCE:=alljoyn-services-$(PKG_TARBALL_VERSION)-src.tar.gz
-#PKG_SOURCE_URL:=https://allseenalliance.org/releases/alljoyn/$(PKG_BASE_VERSION)/
-PKG_SOURCE_URL:=https://mirrors.kernel.org/allseenalliance/alljoyn/$(PKG_BASE_VERSION)/
+PKG_RELEASE:=1
+
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/alljoyn/services-base.git
+PKG_SOURCE_SUBDIR:=alljoyn-services-$(PKG_TARBALL_VERSION)-src
+PKG_SOURCE_VERSION:=09dc552aadd4cc30bb8fc328a13f8fff21062d9e
+PKG_SOURCE:=alljoyn-base-$(PKG_TARBALL_VERSION).tar.xz
+PKG_MIRROR_HASH:=46094f763f71e23732a65a3653afacf85209566b6889a9f1ab9c942d8fc304d4
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
 PKG_IREMAP:=0
-
 PKG_BUILD_PARALLEL:=1
 
-
 include $(INCLUDE_DIR)/package.mk
-
-TAR_OPTIONS+= --strip-components 1
-TAR_CMD=$(HOST_TAR) -C $(1) $(TAR_OPTIONS)
 
 ifneq ($(CONFIG_CCACHE),)
   TARGET_CC=$(TARGET_CC_NOCACHE)
@@ -39,13 +38,13 @@ define Package/$(PKG_NAME)
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=alljoyn \
-	wpa-supplicant \
-	+alljoyn-about \
-	+alljoyn-config \
-	+alljoyn-services_common \
-	+wpa-cli
-  URL:=http://www.allseenalliance.org
-  MAINTAINER:=AllSeen Alliance <allseen-core@lists.allseenalliance.org>
+		wpa-supplicant \
+		+alljoyn-about \
+		+alljoyn-config \
+		+alljoyn-services_common \
+		+hostapd \
+		+wpa-cli
+  URL:=https://github.com/alljoyn/alljoyn.github.com/wiki
 endef
 
 define Package/$(PKG_NAME)/description
@@ -58,8 +57,8 @@ else
   ALLJOYN_BUILD_VARIANT:=release
 endif
 
-
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/services/base/$(AJ_SERVICE)/build/openwrt/openwrt/$(ALLJOYN_BUILD_VARIANT)/dist/$(AJ_SERVICE)
+ALLJOYN_DISTDIR:=$(BUILD_DIR)/alljoyn-$(PKG_VERSION)-src/build/openwrt/openwrt/$(ALLJOYN_BUILD_VARIANT)/dist
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/$(AJ_SERVICE)/build/openwrt/openwrt/$(ALLJOYN_BUILD_VARIANT)/dist/$(AJ_SERVICE)
 
 TARGET_CFLAGS+=-fPIC
 TARGET_CPPFLAGS+=-fPIC
@@ -69,14 +68,16 @@ define Build/Configure/Default
 # Override default to do nothing
 endef
 
+ALLJOYN_BUILD_SERVICES_SAMPLES:=off
+
 define Build/Compile
-	scons -C $(PKG_BUILD_DIR)/services/base/$(AJ_SERVICE) \
+	scons -C $(PKG_BUILD_DIR)/$(AJ_SERVICE) \
 		$(PKG_JOBS) \
 		WS=off \
 		CPU=openwrt \
 		OS=openwrt \
 		"BINDINGS=$(ALLJOYN_BINDINGS)" \
-		"BUILD_SERVICES_SAMPLES=off" \
+		"BUILD_SERVICES_SAMPLES=$(ALLJOYN_BUILD_SERVICES_SAMPLES)" \
 		"VARIANT=$(ALLJOYN_BUILD_VARIANT)" \
 		BR=off \
 		BT=off \
@@ -90,7 +91,8 @@ define Build/Compile
 		"TARGET_LINK=$$(TARGET_CC)" \
 		"TARGET_AR=$$(TARGET_AR)" \
 		"TARGET_RANLIB=$$(TARGET_RANLIB)" \
-		"STAGING_DIR=$$(STAGING_DIR)"
+		"STAGING_DIR=$$(STAGING_DIR)" \
+		"ALLJOYN_DISTDIR=$$(ALLJOYN_DISTDIR)"
 endef
 
 define Build/InstallDev
@@ -108,6 +110,7 @@ define Package/$(PKG_NAME)/install
 
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/onboarding-daemon $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/OnboardingClient $(1)/usr/bin/
 
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -125,8 +128,8 @@ define Package/$(PKG_NAME)/install
 	$(INSTALL_BIN) ./files/wifi_mgmt $(1)/usr/sbin/wifi_mgmt
 	$(INSTALL_DIR) $(1)/etc/alljoyn-onboarding
 	$(INSTALL_CONF) ./files/alljoyn-onboarding.state $(1)/etc/alljoyn-onboarding/alljoyn-onboarding-state
-	$(CP) $(PKG_BUILD_DIR)/services/base/onboarding/cpp/src/OnboardingDaemon/OnboardingService.conf $(1)/etc/alljoyn-onboarding/
-	$(CP) $(PKG_BUILD_DIR)/services/base/onboarding/cpp/src/OnboardingDaemon/FactoryOnboardingService.conf $(1)/etc/alljoyn-onboarding/
+	$(CP) $(PKG_BUILD_DIR)/onboarding/cpp/src/OnboardingDaemon/OnboardingService.conf $(1)/etc/alljoyn-onboarding/
+	$(CP) $(PKG_BUILD_DIR)/onboarding/cpp/src/OnboardingDaemon/FactoryOnboardingService.conf $(1)/etc/alljoyn-onboarding/
 endef
 
 define Package/$(PKG_NAME)/postinst
@@ -160,5 +163,3 @@ exit 0
 endef
 
 $(eval $(call BuildPackage,$(PKG_NAME)))
-
-
