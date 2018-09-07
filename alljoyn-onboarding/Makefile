@@ -110,7 +110,7 @@ define Package/$(PKG_NAME)/install
 
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/onboarding-daemon $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/OnboardingClient $(1)/usr/bin/
+	#$(INSTALL_BIN) $(PKG_INSTALL_DIR)/bin/OnboardingClient $(1)/usr/bin/
 
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/init.d
