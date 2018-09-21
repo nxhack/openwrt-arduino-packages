@@ -9,11 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-arduino-webpanel
 PKG_VERSION:=1.7.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
 PKG_HASH:=5d4aebbbcb044c23a7a820fbf6c355cede80615b614a3e04a843ad6cf63d0adf
+
+PKG_BUILD_DEPENDS:=luac/host
 
 PKG_MAINTAINER:=
 PKG_LICENSE:=GPL+
@@ -49,6 +51,7 @@ define Package/luci-app-arduino-webpanel/install
 	find $(PKG_BUILD_DIR)/usr/ -name '*.lua' -exec luac -s -o {} {} \;
 	$(CP) $(PKG_BUILD_DIR)/usr/* $(1)/usr/
 	$(CP) $(PKG_BUILD_DIR)/www/* $(1)/www/
+	$(CP) ./files/* $(1)/
 endef
 
 $(eval $(call BuildPackage,luci-app-arduino-webpanel))
