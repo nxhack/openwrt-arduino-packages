@@ -15,7 +15,7 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
 PKG_HASH:=5d4aebbbcb044c23a7a820fbf6c355cede80615b614a3e04a843ad6cf63d0adf
 
-PKG_BUILD_DEPENDS:=luac/host
+PKG_BUILD_DEPENDS:=lua/host
 
 PKG_MAINTAINER:=
 PKG_LICENSE:=GPL+
