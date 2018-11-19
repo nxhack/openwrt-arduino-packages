@@ -12,7 +12,7 @@ PKG_VERSION:=2.3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=git://github.com/julioterra/yunSpacebrew.git
+PKG_SOURCE_URL:=https://github.com/julioterra/yunSpacebrew.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=0299adaca762f75afd4551aa63ff54c703cbd7e6
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
@@ -29,6 +29,7 @@ define Package/spacebrew
   CATEGORY:=Network
   TITLE:= Easily connect the Arduino Yun to Spacebrew
   DEPENDS:=+python-light
+  URL:=https://github.com/julioterra/yunSpacebrew
 endef
 
 define Package/spacebrew/description
