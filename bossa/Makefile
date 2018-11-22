@@ -9,7 +9,7 @@ PKG_VERSION:=1.9.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://codeload.github.com/github.com/shumatech/tar.gz/$(PKG_VERSION)?
+PKG_SOURCE_URL:=https://codeload.github.com/shumatech/BOSSA/tar.gz/$(PKG_VERSION)?
 PKG_HASH:=ca650455dfa36cbd029010167347525bea424717a71a691381c0811591c93e72
 PKG_BUILD_DIR:=$(BUILD_DIR)/BOSSA-$(PKG_VERSION)
 
