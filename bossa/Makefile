@@ -5,18 +5,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bossa
-PKG_VERSION:=1.7.0
+PKG_VERSION:=1.9.1
 PKG_RELEASE:=1
 
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/shumatech/BOSSA.git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=5cae9fee241bd3c95c197b2464e9b83240994c43
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_MIRROR_HASH:=d5c24c9ebcdaf79240ef506c15de4440c9c0f9392f3fef0282e7bcd7e8d0adbb
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://codeload.github.com/shumatech/BOSSA/tar.gz/$(PKG_VERSION)?
+PKG_HASH:=ca650455dfa36cbd029010167347525bea424717a71a691381c0811591c93e72
+PKG_BUILD_DIR:=$(BUILD_DIR)/BOSSA-$(PKG_VERSION)
 
 PKG_MAINTAINER:=
-PKG_LICENSE:=
+PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENSE
 
 include $(INCLUDE_DIR)/package.mk
@@ -26,6 +24,7 @@ define Package/bossa
   CATEGORY:=Utilities
   DEPENDS:=+libstdcpp
   TITLE:=Utility to flash ARM microcontrollers
+  URL:=http://www.shumatech.com/web/products/bossa
 endef
 
 define Package/bossa/description
