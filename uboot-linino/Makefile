@@ -13,7 +13,7 @@ PKG_VERSION:=linino
 PKG_RELEASE:=5
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/linino/uboot.git
+PKG_SOURCE_URL:=https://github.com/artynet/uboot.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=29cb27bd059ce23435bc47620098157bdc6c4f9a
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
