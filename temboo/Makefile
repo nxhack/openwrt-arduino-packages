@@ -12,7 +12,7 @@ PKG_VERSION:=1.4.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://downloads.arduino.cc/
+PKG_SOURCE_URL:=https://downloads.arduino.cc/
 PKG_HASH:=3ff22dcfbe1260b4c308a56b8dcfd67c19c19304e4b7298a562d87c6a5cc9424
 
 PKG_MAINTAINER:=
@@ -25,6 +25,7 @@ define Package/temboo
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Build Inventive Apps With Ease
+  URL:=https://temboo.com/arduino
   DEPENDS:=+python-light
 endef
 

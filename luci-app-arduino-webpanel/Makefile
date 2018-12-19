@@ -12,7 +12,7 @@ PKG_VERSION:=1.7.2
 PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://downloads.arduino.cc/
+PKG_SOURCE_URL:=https://downloads.arduino.cc/
 PKG_HASH:=5d4aebbbcb044c23a7a820fbf6c355cede80615b614a3e04a843ad6cf63d0adf
 
 PKG_BUILD_DEPENDS:=lua/host
@@ -28,6 +28,7 @@ define Package/luci-app-arduino-webpanel
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
   TITLE:= simplified wifi configuration panel
+  URL:=https://github.com/arduino/YunWebUI
   DEPENDS:=+luci +luci-lib-json +uhttpd-mod-lua +yun-scripts
 endef
 

@@ -31,8 +31,8 @@ define Package/shellinabox
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Shell In A Box
+  URL:=https://github.com/shellinabox/shellinabox
   DEPENDS:=+libopenssl +libpam +openssl-util +zlib
-  URL:=http://shellinabox.googlecode.com
 endef
 
 define Package/shellinabox/description

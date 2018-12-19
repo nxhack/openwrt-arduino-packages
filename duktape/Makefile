@@ -12,7 +12,7 @@ PKG_VERSION:=1.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=http://duktape.org/
+PKG_SOURCE_URL:=https://duktape.org/
 PKG_HASH:=a52ff1af9750361041f51fb42cc74d3a6a2cb1be839034437f177625903811ca
 
 include $(INCLUDE_DIR)/package.mk
@@ -21,7 +21,7 @@ define Package/duktape
 	SECTION:=lang
 	CATEGORY:=Languages
 	TITLE:=Duktape embeddable JavaScript interpreter
-	URL:=http://www.duktape.org
+	URL:=https://www.duktape.org
 endef
 
 define Package/duktape/description

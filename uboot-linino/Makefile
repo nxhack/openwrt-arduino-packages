@@ -73,7 +73,7 @@ define Package/uboot-ar71xx-$(1)
   CATEGORY:=Boot Loaders
   TITLE:=$(2)
   DEPENDS:=@TARGET_ar71xx
-  URL:=http://www.linino.org
+  URL:=https://www.linino.org/
   DEFAULT:=y if (TARGET_ar71xx_generic_Linino)
   VARIANT:=$(1)
 endef
