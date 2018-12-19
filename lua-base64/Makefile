@@ -26,7 +26,7 @@ define Package/lua-base64
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Lua Base64
-  URL:=http://www.keplerproject.org/base64
+  URL:=https://github.com/toastdriven/lua-base64
   DEPENDS:=+lua
 endef
 

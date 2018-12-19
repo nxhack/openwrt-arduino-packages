@@ -45,7 +45,7 @@ define Package/python-paho-mqtt/Default
   SECTION:=lang
   CATEGORY:=Languages
   SUBMENU:=Python
-  URL:=http://www.eclipse.org/paho/
+  URL:=https://www.eclipse.org/paho/
   DEPENDS:=+libopenssl
 endef
 
