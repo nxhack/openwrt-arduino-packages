@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=alljoyn
-PKG_BASE_VERSION:=16.04
-PKG_PATCHLEVEL:=.00
+PKG_BASE_VERSION:=16.10
+PKG_PATCHLEVEL:=.02
 PKG_VERSION:=$(PKG_BASE_VERSION)$(PKG_PATCHLEVEL)
 PKG_TARBALL_VERSION:=$(PKG_BASE_VERSION)$(PKG_PATCHLEVEL)
 PKG_RELEASE:=1
@@ -10,9 +10,9 @@ PKG_RELEASE:=1
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/alljoyn/core-alljoyn.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_TARBALL_VERSION)-src
-PKG_SOURCE_VERSION:=e52a38239380bca9484f08381377a0dd7db0c05f
+PKG_SOURCE_VERSION:=43cce3fbb24b5cacc54d4cb2b823cab1c7bb41df
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_TARBALL_VERSION)-src.tar.xz
-PKG_MIRROR_HASH:=9cd38138eecc816be249436921e001e006f4b7fbfaf181b2056e7ecba10a47ab
+PKG_MIRROR_HASH:=00699e01eff616cadf5e3e2b65669d06b01a59cfa5647e26fd9fd830936534cc
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
 
@@ -230,6 +230,8 @@ define Package/alljoyn/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/cpp/bin/alljoyn-daemon $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/cpp/lib/liballjoyn.so $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_BIN) ./files/75-alljoyn.ifup $(1)/etc/hotplug.d/iface/75-alljoyn
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/alljoyn.init $(1)/etc/init.d/alljoyn
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
