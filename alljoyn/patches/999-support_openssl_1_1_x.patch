@@ -1,0 +1,57 @@
+diff -urN a/common/crypto/openssl/CryptoAES.cc b/common/crypto/openssl/CryptoAES.cc
+--- a/common/crypto/openssl/CryptoAES.cc	2017-08-01 23:24:47.000000000 +0900
++++ b/common/crypto/openssl/CryptoAES.cc	2019-02-13 15:54:11.065552242 +0900
+@@ -54,6 +54,10 @@
+ #include <Status.h>
+ #include "OpenSsl.h"
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++#define QCC_LINUX_OPENSSL_GT_1_1_X
++#endif
++
+ using namespace std;
+ using namespace qcc;
+ 
+diff -urN a/common/crypto/openssl/CryptoHash.cc b/common/crypto/openssl/CryptoHash.cc
+--- a/common/crypto/openssl/CryptoHash.cc	2017-08-01 23:24:47.000000000 +0900
++++ b/common/crypto/openssl/CryptoHash.cc	2019-02-13 15:54:20.921510141 +0900
+@@ -43,6 +43,10 @@
+ #include <Status.h>
+ #include "OpenSsl.h"
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++#define QCC_LINUX_OPENSSL_GT_1_1_X
++#endif
++
+ using namespace std;
+ using namespace qcc;
+ 
+diff -urN a/common/crypto/openssl/OpenSsl.cc b/common/crypto/openssl/OpenSsl.cc
+--- a/common/crypto/openssl/OpenSsl.cc	2017-08-01 23:24:47.000000000 +0900
++++ b/common/crypto/openssl/OpenSsl.cc	2019-02-13 15:54:02.217590034 +0900
+@@ -44,6 +44,10 @@
+ 
+ using namespace qcc;
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++#define QCC_LINUX_OPENSSL_GT_1_1_X
++#endif
++
+ #if defined(OPENSSL_THREADS) && !defined(QCC_LINUX_OPENSSL_GT_1_1_X)
+ 
+ OpenSsl_ScopedLock::OpenSsl_ScopedLock() {
+diff -urN a/common/crypto/openssl/OpenSsl.h b/common/crypto/openssl/OpenSsl.h
+--- a/common/crypto/openssl/OpenSsl.h	2017-08-01 23:24:47.000000000 +0900
++++ b/common/crypto/openssl/OpenSsl.h	2019-02-13 15:54:49.553387821 +0900
+@@ -46,6 +46,11 @@
+ #include <openssl/ssl.h>
+ #include <openssl/x509.h>
+ 
++#include <openssl/opensslv.h>
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++#include <openssl/modes.h>
++#endif
++
+ namespace qcc {
+ 
+ /**
