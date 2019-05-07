@@ -26,7 +26,7 @@ endif
 ifneq ($(IS_HEAD),y)
 PKG_BUILD_DEPENDS:=PACKAGE_python-paho-mqtt:python \
                    PACKAGE_python-paho-mqtt:python-setuptools \
-                   PACKAGE_python3-paho-mqtt:python \
+                   PACKAGE_python3-paho-mqtt:python3 \
                    PACKAGE_python3-paho-mqtt:python3-setuptools
 endif
 
