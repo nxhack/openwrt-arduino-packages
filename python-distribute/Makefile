@@ -39,8 +39,6 @@ $(call include_mk, python-package.mk)
 $(call include_mk, python3-package.mk)
 endif
 
-PKG_UNPACK:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
-
 define Package/python-distribute/Default
   SECTION:=lang
   CATEGORY:=Languages
