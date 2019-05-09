@@ -11,7 +11,6 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/5f/ad/1fde06877a8d7d5c9b60eff7de2d452f639916ae1d48f0b8f97bf97e570a
 PKG_HASH:=3dc7a8d059dcf72f0ead2fa2144a24ee0ef07dce816e8c3545d7345767138c5e
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 PKG_LICENSE:=PSF or ZPL
 PKG_LICENSE_FILES:=
@@ -39,6 +38,8 @@ else
 $(call include_mk, python-package.mk)
 $(call include_mk, python3-package.mk)
 endif
+
+PKG_UNPACK:=unzip -q -j -d $(PKG_BUILD_DIR) $(DL_DIR)/$(PKG_SOURCE)
 
 define Package/python-distribute/Default
   SECTION:=lang
